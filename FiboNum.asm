@@ -52,7 +52,7 @@ main:
 
             # Bound check for n > 0
 
-            blt $t0, 1, invalid_input   # If n < 1, jump to invalid_input
+            blt $t0, 1, invalid   # If n < 1, jump to invalid
 
 
             # Print Fibonacci Sequence
@@ -74,7 +74,7 @@ main:
             syscall
 
             # If n == 1, skip and ask if user wants to continue
-            beq $t0, 1, ask_continue
+            beq $t0, 1, continue
 
             # Print second Fibonacci number
             li $v0, 1
@@ -89,7 +89,7 @@ main:
             li $t1, 2                   # i = 2 (since 1,1 already printed)
 
 loop:
-            bge $t1, $t0, ask_continue  # If i >= n, go to continuation prompt
+            bge $t1, $t0, continue  # If i >= n, go to continuation prompt
 
             add $t4, $t2, $t3           # Fib(i) = Fib(i-1) + Fib(i-2)
             move $t2, $t3               # Shift Fib(i-1) to Fib(i-2)
