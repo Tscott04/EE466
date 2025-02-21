@@ -35,7 +35,7 @@
             .data
 prompt:     .asciiz "Enter a number (n ≥ 1): "       # Prompt message
 err_msg:    .asciiz "Error: n must be >= 1. Try again.\n"  # Error message
-result_msg: .asciiz "Fibonacci sequence: "          # Fibonacci result header
+result_msg: .asciiz "Fibonacci sequence: \n"          # Fibonacci result header
 continue_msg: .asciiz "Do you want to continue? (1: Yes, 0: No): " # Continuation message
 newline:    .asciiz "\n"                            # Newline character
 
