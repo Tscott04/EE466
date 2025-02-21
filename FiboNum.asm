@@ -104,7 +104,7 @@ loop:
             syscall
 
             addi $t1, $t1, 1            # Increment loop counter (i++)
-            j fib_loop                  # Repeat loop
+            j loop                  # Repeat loop
 
 
 # Invalid Input Code
