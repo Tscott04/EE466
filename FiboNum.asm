@@ -1,35 +1,7 @@
 # fibonacci.s
 # Asks for a number n (n >= 1). Then it calculates and prints
 # the Fibonacci sequence up to the nth term.
-#
-# Register Usage:
-# $t0 - n (user input, number of terms)
-# $t1 - loop counter (i)
-# $t2 - Fib(n-2)
-# $t3 - Fib(n-1)
-# $t4 - Fib(n) (current Fibonacci number)
-# $t5 - Temporary storage for validation
-#
-# Algorithm in C:
-# int n, a=1, b=1, c, i;
-# scanf("Enter n (>=1): ", &n);
-# if (n < 1) {
-#   printf("Invalid input, try again.");
-#   restart program;
-# }
-# printf("Fibonacci sequence: ");
-# printf("%d", a);
-# if (n > 1) printf("%d", b);
-# for (i=2; i<n; i++) {
-#   c = a + b;
-#   printf("%d", c);
-#   a = b;
-#   b = c;
-# }
-# printf("\nDo you want to continue? (1: Yes, 0: No)");
-# if (user enters 1) restart;
-# else exit;
-#------------------------------------------------------------
+#---------------------------------------------------------
 
               .data
 prompt:       .asciiz "Enter a number (n ≥ 1): "       # Prompt message
