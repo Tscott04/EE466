@@ -1,6 +1,6 @@
 # SUM.s
 # Asks for a number n (n >= 1). Then it calculates and prints
-# the Sum up to the nth term.
+# the Sum up to the nth term recursivly.
 #---------------------------------------------------------
 
               .data
@@ -20,7 +20,7 @@ main:
 
         li $v0, 5
         syscall
-        move $t0, $v0
+        move $t0, $v0        # store input number in $t0
 
         blt $t0, 1, invalid
 
@@ -28,12 +28,13 @@ main:
         la $a0, result_msg
         syscall
 
-        move $a0, $t0
-        jal sum               # computes sum from 1 to n
+        move $a0, $t0        # pass n in $a0 to sum
+        jal sum              # computes sum from 1 to n
 
-        # $v0 has the sum result
-        li $v0, 1
-        move $a0, $v0
+        move $t1, $v0        # save result from sum into $t1!
+
+        li $v0, 1            # syscall code for print_int
+        move $a0, $t1        # move saved result into $a0
         syscall
 
         li $v0, 4
@@ -45,43 +46,28 @@ main:
     #Chen Liu Code
 
 sum:
-    addi $sp, $sp, -8         # make space on stack
-    sw $ra, 4($sp)            # save return address
-    sw $a0, 0($sp)            # save argument n
+    addi $sp, $sp, -8
+    sw $ra, 4($sp)
+    sw $a0, 0($sp)
 
-    # Base case: if n == 1, return 1
     li $t1, 1
     beq $a0, $t1, base_case
 
-    # Recursive case:
-    addi $a0, $a0, -1         # n = n - 1
-    jal sum                   # sum(n - 1)
+    addi $a0, $a0, -1
+    jal sum
 
-    lw $a0, 0($sp)            # restore original n
-    lw $ra, 4($sp)            # restore return address
-    addi $sp, $sp, 8          # pop 2 items from stack
+    lw $a0, 0($sp)
+    lw $ra, 4($sp)
+    addi $sp, $sp, 8
 
-    add $v0, $v0, $a0         # sum = sum(n - 1) + n
+    add $v0, $v0, $a0
     jr $ra
 
 base_case:
-    li $v0, 1                 # return 1
+    li $v0, 1
     lw $ra, 4($sp)
     addi $sp, $sp, 8
     jr $ra
-        # Loop Code
-
-loop:
-        addi $a0, $a0, -1 # else decrement n
-        jal sum # recursive call
-
-        lw $a0, 0($sp) # restore original n
-        lw $ra, 4($sp) # and return address
-        addi $sp, $sp, 8 # pop 2 items from stack
-
-        add $v0, $a0, $v0 # changed to adding result
-
-        jr $ra # and return
 
 # Invalid Input Code
 
