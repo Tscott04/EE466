@@ -31,7 +31,7 @@ main:
         move $a0, $t0        # pass n in $a0 to sum
         jal sum              # computes sum from 1 to n
 
-        move $t1, $v0        # save result from sum into $t1!
+        move $t1, $v0        # save result from sum into $t1, previous error saved 1 into $a0 and caused base case issue.
 
         li $v0, 1            # syscall code for print_int
         move $a0, $t1        # move saved result into $a0
@@ -77,7 +77,7 @@ invalid:
             syscall                     # Print error message
             j main                      # Restart program
 
-# Prompt for entering another Fib #
+# Prompt for entering another SUM #
 
 continue:
             li $v0, 4                   # Load syscall code for printing a string
