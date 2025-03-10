@@ -1,6 +1,6 @@
-# fibonacci.s
+# SUM.s
 # Asks for a number n (n >= 1). Then it calculates and prints
-# the Fibonacci sequence up to the nth term.
+# the Sum up to the nth term.
 #---------------------------------------------------------
 
               .data
@@ -14,70 +14,74 @@ newline:      .asciiz "\n"                            # Newline character
             .globl main
 
 main:
-            li $v0, 4                   # Load syscall code for printing a string
-            la $a0, prompt              # Load address of the prompt message
-            syscall                     # Print the prompt
+        li $v0, 4
+        la $a0, prompt
+        syscall
 
-            li $v0, 5                   # Load syscall code for reading an integer
-            syscall                     # Read user input
-            move $t0, $v0               # Store user input (n) in $t0
+        li $v0, 5
+        syscall
+        move $t0, $v0
 
-            # Bound check for n > 0
+        blt $t0, 1, invalid
 
-            blt $t0, 1, invalid   # If n < 1, jump to invalid
+        li $v0, 4
+        la $a0, result_msg
+        syscall
 
+        move $a0, $t0
+        jal sum               # computes sum from 1 to n
 
-            # Print Fibonacci Sequence
+        # $v0 has the sum result
+        li $v0, 1
+        move $a0, $v0
+        syscall
 
-            li $v0, 4                   # Load syscall code for printing a string
-            la $a0, result_msg          # Load address of Fibonacci message
-            syscall                     # Print the message
+        li $v0, 4
+        la $a0, newline
+        syscall
 
-            li $t2, 1                   # Fib(n-2) = 1 (by definition)
-            li $t3, 1                   # Fib(n-1) = 1 (by definition)
+        j continue
 
-            # Print first Fibonacci number
-            li $v0, 1
-            move $a0, $t2               # Load Fib(1) = 1 into argument register
-            syscall                     # Print Fib(1)
+    #Chen Liu Code
 
-            li $v0, 4                   # Print newline
-            la $a0, newline
-            syscall
+sum:
+    addi $sp, $sp, -8         # make space on stack
+    sw $ra, 4($sp)            # save return address
+    sw $a0, 0($sp)            # save argument n
 
-            # If n == 1, skip and ask if user wants to continue
-            beq $t0, 1, continue
+    # Base case: if n == 1, return 1
+    li $t1, 1
+    beq $a0, $t1, base_case
 
-            # Print second Fibonacci number
-            li $v0, 1
-            move $a0, $t3               # Load Fib(2) = 1 into argument register
-            syscall                     # Print Fib(2)
+    # Recursive case:
+    addi $a0, $a0, -1         # n = n - 1
+    jal sum                   # sum(n - 1)
 
-            li $v0, 4                   # Print newline
-            la $a0, newline
-            syscall
+    lw $a0, 0($sp)            # restore original n
+    lw $ra, 4($sp)            # restore return address
+    addi $sp, $sp, 8          # pop 2 items from stack
 
-            # Initialize loop counter
-            li $t1, 2                   # i = 2 (since 1,1 already printed)
+    add $v0, $v0, $a0         # sum = sum(n - 1) + n
+    jr $ra
+
+base_case:
+    li $v0, 1                 # return 1
+    lw $ra, 4($sp)
+    addi $sp, $sp, 8
+    jr $ra
+        # Loop Code
 
 loop:
-            bge $t1, $t0, continue  # If i >= n, go to continuation prompt
+        addi $a0, $a0, -1 # else decrement n
+        jal sum # recursive call
 
-            add $t4, $t2, $t3           # Fib(i) = Fib(i-1) + Fib(i-2)
-            move $t2, $t3               # Shift Fib(i-1) to Fib(i-2)
-            move $t3, $t4               # Shift Fib(i) to Fib(i-1)
+        lw $a0, 0($sp) # restore original n
+        lw $ra, 4($sp) # and return address
+        addi $sp, $sp, 8 # pop 2 items from stack
 
-            li $v0, 1                   # Load syscall code for printing an integer
-            move $a0, $t4               # Load computed Fibonacci number
-            syscall                     # Print Fibonacci number
+        add $v0, $a0, $v0 # changed to adding result
 
-            li $v0, 4                   # Print newline
-            la $a0, newline
-            syscall
-
-            addi $t1, $t1, 1            # Increment loop counter (i++)
-            j loop                  # Repeat loop
-
+        jr $ra # and return
 
 # Invalid Input Code
 
