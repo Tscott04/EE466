@@ -1,0 +1,33 @@
+symbolic name,Number,Usage
+zero,0,constant 0
+at,1,reserved for assembler
+v0,2,result register
+v1,3,result register
+a0,4,argument register
+a1,5,argument register
+a2,6,argument register
+a3,7,argument register
+t0,8,temp register
+t1,9,temp register
+t2,10,temp register
+t3,11,temp register
+t4,12,temp register
+t5,13,temp register
+t6,14,temp register
+t7,15,temp register
+t8,16,temp register
+t9,17,temp register
+s0,18,saved register
+s1,19,saved register
+s2,20,saved register
+s3,21,saved register
+s4,22,saved register
+s5,23,saved register
+s6,24,saved register
+s7,25,saved register
+k0,26,kernel register
+k1,27,kernel register
+gp,28,global data pointer
+sp,29,stack pointer
+fp,30,frame pointer
+ra,31,return address
