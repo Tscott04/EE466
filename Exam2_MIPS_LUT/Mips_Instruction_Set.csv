@@ -1,0 +1,55 @@
+Instruction,Call,Example,Meaning,Type,Comments
+add,add,"add $1,$2,$3",$1=$2+$3,Arithmetic ,
+subtract,sub,"sub $1,$2,$3",$1=$2-$3,Arithmetic ,
+add immediate,addi,"addi $1,$2,100",$1=$2+100,Arithmetic ,"""Immediate"" means a constant number"
+add unsigned,addu,"addu $1,$2,$3",$1=$2+$3,Arithmetic ,"Values are treated as unsigned integers, not two's complement integers"
+subtract unsigned,subu,"subu $1,$2,$3",$1=$2-$3,Arithmetic ,"Values are treated as unsigned integers, not two's complement integers"
+add immediate unsigned,addiu,"addiu $1,$2,100",$1=$2+100,Arithmetic ,"Values are treated as unsigned integers, not two's complement integers"
+Multiply (without overflow),mul,"mul $1,$2,$3",$1=$2*$3,Arithmetic ,Result is only 32 bits!
+Multiply,mult,"mult $2,$3","$hi,$low=$2*$3",Arithmetic ,Upper 32 bits stored in special register hi Lower 32 bits stored in special register lo
+Divide,div,"div $2,$3","$hi,$low=$2/$3",Arithmetic ,Remainder stored in special register hi Quotient stored in special registerlo
+and,and,"and $1,$2,$3",$1=$2&$3,logical,Bitwise AND
+or,or ,"or $1,$2,$3",$1=$2|$3,logical,Bitwise OR
+and immediate,andi,"andi $1,$2,100",$1=$2&100,logical,Bitwise AND with immediate value
+or immediate,or ,"or $1,$2,100",$1=$2|100,logical,Bitwise OR with immediate value
+shift left logical,sll,"sll $1,$2,10",$1=$2<<10,logical,Shift left by constant number of bits
+shift right logical,srl,"srl $1,$2,10",$1=$2>>10,logical,Shift right by constant number of bits
+load word,lw,"lw $1,100($2)",$1=Memory[$2+100],Data Transfer,Copy from memory to register
+store word,sw,"sw $1,100($2)",Memory[$2+100]=$1,Data Transfer,Copy from register to memory
+load upper immediate,lui,"lui $1,100",$1=100x2^16,Data Transfer,Load constant into upper 16 bits. Lower 16 bits are set to zero.
+load address,la,"la $1,label",$1=Address of label,Data Transfer,"Pseudo-instruction (provided by assembler, not processor!) Loads computed address of label (not its contents) into register"
+load immediate,li,"li $1,100",$1=100,Data Transfer,"Pseudo-instruction (provided by assembler, not processor!) Loads immediate value into register"
+move from hi,mfhi,mfhi $2,$2=hi,Data Transfer,Copy from special register hi to general register
+move from lo,mflo,mflo $2,$2=lo,Data Transfer,Copy from special register lo to general register
+move,move,"move $1,$2",$1=$2,Data Transfer,"Pseudo-instruction (provided by assembler, not processor!) Copy from register to register."
+branch on equal,beq,"beq $1,$2,100",if($1==$2) go to PC+4+100,Conditional Branch,Test if registers are equal
+branch on not equal,bne,"bne $1,$2,100",if($1!=$2) go to PC+4+100,Conditional Branch,Test if registers are not equal
+branch on greater than,bgt,"bgt $1,$2,100",if($1>$2) go to PC+4+100,Conditional Branch,
+branch on greater than or equal,bge,"bge $1,$2,100",if($1>=$2) g,Conditional Branch,
+branch on less than,blt,"blt $1,$2,100",if($1<$2) go to PC+4+100,Conditional Branch,
+branch on less than or equal,ble,"ble $1,$2,100",if($1<=$2) go to PC+4+100,Conditional Branch,
+set on less than,slt,"slt $1,$2,$3",if($2<$3)$1=1; else $1=0,Comparison,"Test if less than. If true, set $1 to 1. Otherwise, set $1 to 0."
+set on less than immediate,slti,"slti $1,$2,100",if($2<100)$1=1; else $1=0,Comparison,"Test if less than. If true, set $1 to 1. Otherwise, set $1 to 0."
+jump,j,j 1000,go to address 1000,Unconditional Jump,Jump to target address
+jump register,jr,jr $1,go to address stored in $1,Unconditional Jump,"For switch, procedure return"
+jump and link,jal,jal 1000,$ra=PC+4; go to address 1000,Unconditional Jump,Use when making procedure call. This saves the return address in $ra
+print_int,1,,Print integer number (32 bit),System Calls,$a0 = integer to be printed
+print_float,2,,Print floating-point number (32 bit),System Calls,$f12 = float to be printed
+print_double,3,,Print floating-point number (64 bit),System Calls,$f12 = double to be printed
+print_string,4,,Print null-terminated character string,System Calls,$a0 = address of string in memory
+read_int,5,,Read integer number from user,System Calls,Integer returned in $v0
+read_float,6,,Read floating-point number from user,System Calls,Float returned in $f0
+read_double,7,,Read double floating-point number from user,System Calls,Double returned in $f0
+read_string,8,,Works the same as Standard C Library fgets() function.,System Calls,$a0 = memory address of string input buffer $a1 = length of string buffer (n)
+sbrk,9,,Returns the address to a block of memory containing n additional bytes. (Useful for dynamic memory allocation),System Calls,"$a0 = amount, address in $v0"
+exit,10,,Stop program from running,System Calls,
+print_char,11,,Print character,System Calls,$a0 = character to be printed
+read_char,12,,Read character from user,System Calls,Char returned in $v0
+exit2,13,,Stops program from running and returns an integer,System Calls,$a0 = result (integer number)
+.word ,,,,Assembler Directives,Store n 32-bit values in successive memory words
+.half,,,,Assembler Directives,Store n 16-bit values in successive memory words
+.byte,,,,Assembler Directives,Store n 8-bit values in successive memory words
+.ascii str,,,,Assembler Directives,"Store the ASCII string str in memory. Strings are in double-quotes, i.e. ""Computer Science"""
+.asciiz str,,,,Assembler Directives,"Store the ASCII string str in memory and null-terminate it Strings are in double-quotes, i.e. ""Computer Science"""
+.space n,,,,Assembler Directives,Leave an empty n-byte region of memory for later use
+.align n,,,,Assembler Directives,"Align the next datum on a 2^n byte boundary. For example, .align 2 aligns the next value on a word boundary"
