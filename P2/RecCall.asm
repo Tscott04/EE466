@@ -14,7 +14,7 @@ newline:      .asciiz "\n"                            # Newline character
             .globl main
 
 main:
-        li $v0, 4                       # Load syscall code for printing a string
+        li $v0, 4                      # Load syscall code for printing a string
         la $a0, prompt                 # Load address of prompt message
         syscall                        # Print prompt message to ask for n
 
